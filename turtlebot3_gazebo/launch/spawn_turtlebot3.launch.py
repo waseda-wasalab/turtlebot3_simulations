@@ -24,6 +24,7 @@ from launch_ros.actions import Node
 def generate_launch_description():
     # Get the urdf file
     TURTLEBOT3_MODEL = os.environ['TURTLEBOT3_MODEL']
+    namespace = LaunchConfiguration('namespace', default='')
     model_folder = 'turtlebot3_' + TURTLEBOT3_MODEL
     urdf_path = os.path.join(
         get_package_share_directory('turtlebot3_gazebo'),
@@ -45,11 +46,18 @@ def generate_launch_description():
         'y_pose', default_value='0.0',
         description='Specify namespace of the robot')
 
+    declare_namespace = DeclareLaunchArgument(
+        'namespace',
+        default_value='',
+        description='Specifying namespace to node')
+
     start_gazebo_ros_spawner_cmd = Node(
         package='gazebo_ros',
+        namespace=namespace,
         executable='spawn_entity.py',
         arguments=[
-            '-entity', TURTLEBOT3_MODEL,
+            '-robot_namespace', namespace,
+            '-entity', namespace,
             '-file', urdf_path,
             '-x', x_pose,
             '-y', y_pose,
@@ -63,6 +71,7 @@ def generate_launch_description():
     # Declare the launch options
     ld.add_action(declare_x_position_cmd)
     ld.add_action(declare_y_position_cmd)
+    ld.add_action(declare_namespace)
 
     # Add any conditioned actions
     ld.add_action(start_gazebo_ros_spawner_cmd)
