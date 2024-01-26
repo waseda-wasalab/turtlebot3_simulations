@@ -30,7 +30,7 @@ def generate_launch_description():
 
     use_sim_time = LaunchConfiguration('use_sim_time', default='false')
     urdf_file_name = 'turtlebot3_' + TURTLEBOT3_MODEL + '.urdf'
-
+    robot_name = LaunchConfiguration('robot_name', default='')
     print('urdf_file_name : {}'.format(urdf_file_name))
 
     urdf_path = os.path.join(
@@ -54,7 +54,8 @@ def generate_launch_description():
             output='screen',
             parameters=[{
                 'use_sim_time': use_sim_time,
-                'robot_description': robot_desc
+                'robot_description': robot_desc,
+                'name_space':robot_name
             }],
         ),
     ])

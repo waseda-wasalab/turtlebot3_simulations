@@ -35,7 +35,8 @@ def generate_launch_description():
     # Launch configuration variables specific to simulation
     x_pose = LaunchConfiguration('x_pose', default='0.0')
     y_pose = LaunchConfiguration('y_pose', default='0.0')
-
+    yaw = LaunchConfiguration('yaw',default='0.0')
+    robot_name = LaunchConfiguration('robot_name', default='')
     # Declare the launch arguments
     declare_x_position_cmd = DeclareLaunchArgument(
         'x_pose', default_value='0.0',
@@ -49,11 +50,13 @@ def generate_launch_description():
         package='gazebo_ros',
         executable='spawn_entity.py',
         arguments=[
-            '-entity', TURTLEBOT3_MODEL,
+            '-entity', robot_name,
             '-file', urdf_path,
             '-x', x_pose,
             '-y', y_pose,
-            '-z', '0.01'
+            '-z', '0.01',
+            '-Y', yaw,
+            '-robot_namespace', robot_name
         ],
         output='screen',
     )
